@@ -1,12 +1,17 @@
 import React, { Component } from "react"
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import {connect} from 'react-redux'
+import {createDemo1Action,createDemo2Action} from '../../redux/actions/test_action'
 import './css/login.less'
 import logo from '../../assets/imgs/logo512.png'
 const { Item } = Form
 
-export default class Login extends Component {
+ class Login extends Component {
     //自定义校验
+    componentDidMount(){
+        console.log(this.props);
+    }
     pwdvalidator = (rule, value, callback) => {
         if (!value) {
            callback('提示密码输入')
@@ -21,21 +26,25 @@ export default class Login extends Component {
             callback()
         }
     }
-render() {
-    const onFinish = () => {
+    render() {
+    
+    const onFinish = (event) => {
+        event.preventDefault();
         //点击登录按钮的回调
-
+        this.props.demo1('dawdaw')
         console.log('Received values of form: ');
     };
     return (
         <div className='login'>
             <header>
                 <img src={logo} alt="logo" />
-                <h1>胡豪达的Blog</h1>
+                <h1>胡豪达的Blog{this.props.test}</h1>
             </header>
             <section>
                 <h1>登录</h1>
                 <Form
+                
+                   
                     name="normal_login"
                     className="login-form"
                     initialValues={{ remember: true }}
@@ -88,3 +97,10 @@ render() {
     )
 }
 }
+export default  connect(
+    state =>({test:state.test}),
+    {
+        demo1:createDemo1Action,
+        demo2:createDemo2Action,
+    }
+)(Login)
